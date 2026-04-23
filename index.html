@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Embedded Document</title>
+    <title>Embedded Google Doc</title>
     <style>
-        /* This ensures the page takes up the full browser window */
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            overflow: hidden;
+            width: 100%;
+            overflow: hidden; /* Prevents double scrollbars */
         }
 
-        /* This ensures the iframe stretches to fill the screen */
         iframe {
             width: 100%;
             height: 100%;
@@ -23,8 +22,9 @@
 </head>
 <body>
     <iframe 
-        src="https://docs.google.com/document/d/e/2PACX-1vQxuxgqptqN3k4HwPXPTydZVYyVBtFg0y1fm-jxhybRYtkUqvw3z9arEy07QzAfyTAxDNaBT8gvwIux/pub" 
-        title="Google Doc">
+        src="https://docs.google.com/document/d/e/2PACX-1vQxuxgqptqN3k4HwPXPTydZVYyVBtFg0y1fm-jxhybRYtkUqvw3z9arEy07QzAfyTAxDNaBT8gvwIux/pub?embedded=true" 
+        title="Google Doc Embed"
+        allowfullscreen>
     </iframe>
 </body>
 </html>
