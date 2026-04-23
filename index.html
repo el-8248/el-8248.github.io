@@ -1,1 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedded Document</title>
+    <style>
+        /* This ensures the page takes up the full browser window */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
 
+        /* This ensures the iframe stretches to fill the screen */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <iframe 
+        src="https://docs.google.com/document/d/e/2PACX-1vQxuxgqptqN3k4HwPXPTydZVYyVBtFg0y1fm-jxhybRYtkUqvw3z9arEy07QzAfyTAxDNaBT8gvwIux/pub" 
+        title="Google Doc">
+    </iframe>
+</body>
+</html>
