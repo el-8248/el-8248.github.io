@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+    <title>EWB</title>
+    <link href="https://el-8248.github.io/feed.xml" rel="self" />
+    <link href="https://el-8248.github.io" />
+    <updated>1969-12-31T16:00:00-08:00</updated>
+    <author>
+        <name>Elliott Weston Ball</name>
+    </author>
+    <id>https://el-8248.github.io</id>
+
+</feed>

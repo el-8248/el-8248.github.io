@@ -1,0 +1,13 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "EWB",
+    "description": "",
+    "home_page_url": "https://el-8248.github.io",
+    "feed_url": "https://el-8248.github.io/feed.json",
+    "user_comment": "",
+    "author": {
+        "name": "Elliott Weston Ball"
+    },
+    "items": [
+    ]
+}
