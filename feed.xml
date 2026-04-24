@@ -3,10 +3,30 @@
     <title>EWB</title>
     <link href="https://el-8248.github.io/feed.xml" rel="self" />
     <link href="https://el-8248.github.io" />
-    <updated>1969-12-31T16:00:00-08:00</updated>
+    <updated>2026-04-23T22:44:14-07:00</updated>
     <author>
         <name>Elliott Weston Ball</name>
     </author>
     <id>https://el-8248.github.io</id>
 
+    <entry>
+        <title>Hello World!</title>
+        <author>
+            <name>Elliott Weston Ball</name>
+        </author>
+        <link href="https://el-8248.github.io/hello-worls.html"/>
+        <id>https://el-8248.github.io/hello-worls.html</id>
+
+        <updated>2026-04-23T22:44:03-07:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    How Are You Tonight?
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>How Are You Tonight?</p>
+            ]]>
+        </content>
+    </entry>
 </feed>
