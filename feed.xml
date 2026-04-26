@@ -3,10 +3,36 @@
     <title>EWB</title>
     <link href="https://el-8248.github.io/feed.xml" rel="self" />
     <link href="https://el-8248.github.io" />
-    <updated>1969-12-31T16:00:00-08:00</updated>
+    <updated>2026-04-25T22:08:00-07:00</updated>
     <author>
         <name>Elliott Weston Ball</name>
     </author>
     <id>https://el-8248.github.io</id>
 
+    <entry>
+        <title>Hello World, and beyond</title>
+        <author>
+            <name>Elliott Weston Ball</name>
+        </author>
+        <link href="https://el-8248.github.io/hello-world-and-beyond.html"/>
+        <id>https://el-8248.github.io/hello-world-and-beyond.html</id>
+
+        <updated>2026-04-25T22:08:00-07:00</updated>
+            <summary type="html">
+                <![CDATA[
+                    Welcome to my personal page for all of my little ramblings. Everything From Artemis II To IPoAC is part of this website.
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>Welcome to my personal page for all of my little ramblings.</p>
+<hr>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://static.scientificamerican.com/dam/asset/c46b9773-3450-4b42-9065-50a9bd6ab9ca/Artemis-ii-moon.jpg" alt="Artemis 2 in front of the moon" width="800" height="600" data-is-external-image="true"></figure>
+<p>Everything From Artemis II</p>
+<hr>
+<figure class="post__image post__image--center"><img loading="lazy"  src="https://i.redd.it/r0xrvo1k5zk81.jpg" alt="" width="1200" height="1454" data-is-external-image="true"></figure>
+<p>To <a href="https://en.wikipedia.org/wiki/IP_over_Avian_Carriers" title="IP over Avian Carriers" target="_blank" rel="noopener noreferrer">IPoAC</a> is part of this website.</p>
+            ]]>
+        </content>
+    </entry>
 </feed>
