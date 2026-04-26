@@ -9,19 +9,5 @@
         "name": "Elliott Weston Ball"
     },
     "items": [
-        {
-            "id": "https://el-8248.github.io/hello-worls.html",
-            "url": "https://el-8248.github.io/hello-worls.html",
-            "title": "Hello World!",
-            "summary": "How Are You Tonight?",
-            "content_html": "<p>How Are You Tonight?</p>",
-            "author": {
-                "name": "Elliott Weston Ball"
-            },
-            "tags": [
-            ],
-            "date_published": "2026-04-23T22:44:03-07:00",
-            "date_modified": "2026-04-23T22:44:14-07:00"
-        }
     ]
 }
