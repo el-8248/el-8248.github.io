@@ -110,8 +110,9 @@
 	border-top:1px solid #fff;
 }
 #welcome-screen .check-email {
-	background: url("../img/welcome/check-email.png") no-repeat 10px center;
+	background: url("../img/welcome/chainlynx.png") no-repeat 10px center;
 	border-top:1px solid #fff;
+	background-size: 40px;
 }
 #welcome-screen .watch-video {
 	background: url("../img/welcome/watch-video.png") no-repeat 10px center;
