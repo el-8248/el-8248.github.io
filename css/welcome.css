@@ -39,9 +39,10 @@
     margin-top: -25px;
 }
 #welcome-screen .welcome-header{
-	background: url("../img/welcome/circle-of-friends.png") 20px 20px no-repeat #fff;
-	height: 108px;
-    padding: 7px 100px 0 110px;
+	background: url("../img/welcome/Elliott.jpg") 10px 10px no-repeat #fff;
+	background-size: 250px;
+	height: 200px;
+    padding: 0px 100px 0 270px;
     border-bottom:1px solid #d5d5d5;
 }
 #welcome-screen .welcome-select{
