@@ -16,7 +16,7 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Lucida Grande", "Segoe UI", Roboto, sans-serif;
       /* Classic Aqua Gradient Wallpaper */
-      background: radial-gradient(circle at 50% 30%, #1c5298 0%, #081d3d 100%);
+      background: radial-gradient(lightblue,darkcyan);
       height: 100vh;
       overflow: hidden;
       display: flex;
@@ -26,17 +26,17 @@
     /* --- OS X MENU BAR --- */
     #menubar {
       height: 22px;
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(0, 0, 0, 0.75);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 10px;
       font-size: 13px;
-      color: #000;
+      color: #fff;
       z-index: 1000;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px rgba(255,255,255,0.1);
     }
 
     .menu-left, .menu-right {
@@ -68,14 +68,14 @@
       position: absolute;
       top: 20px;
       left: 0;
-      background: rgba(255, 255, 255, 0.95);
-      border: 1px solid rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 0 0 5px 5px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+      box-shadow: 0 5px 15px rgba(255,255,255,0.25);
       min-width: 140px;
       padding: 4px 0;
       z-index: 1001;
-      color: #000;
+      color: #fff;
     }
 
     .dropdown div {
@@ -266,7 +266,7 @@
   <div id="menubar">
     <div class="menu-left">
       <div class="menu-item apple-logo" onclick="toggleMenu(event, 'apple-menu')">
-        
+        <img src="image.png" style="margin-top: 1px; height: 20px;">
         <div id="apple-menu" class="dropdown">
           <div>About This Mac</div>
           <hr>
@@ -342,7 +342,7 @@
         <div class="dot minimize" onclick="closeWindow('win-terminal')"></div>
         <div class="dot zoom"></div>
       </div>
-      <div class="window-title">Terminal - bash - 80x24</div>
+      <div class="window-title">Terminal - bash</div>
     </div>
     <div class="window-body terminal-body" onclick="document.getElementById('term-input').focus()">
       <div id="terminal-output">
