@@ -1,53 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=./en/index.html">
-    <title>Redirecting...</title>
-    <script type="text/javascript">
-        window.location.href = "./en/index.html";
-    </script>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f7f9fa;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            text-align: center;
-            padding: 20px;
-        }
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #09f;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        a {
-            color: #09f;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mac OS X Desktop Portfolio</title>
+  <style>
+    /* --- RESET & BASE STYLES --- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Lucida Grande", "Segoe UI", Roboto, sans-serif;
+      /* Classic Aqua Gradient Wallpaper */
+      background: radial-gradient(circle at 50% 30%, #1c5298 0%, #081d3d 100%);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* --- OS X MENU BAR --- */
+    #menubar {
+      height: 22px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      font-size: 13px;
+      color: #000;
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .menu-left, .menu-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .menu-item {
+      position: relative;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    .menu-item:hover {
+      background: #2b73e3;
+      color: white;
+    }
+
+    .apple-logo {
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    /* Dropdown Menu Styles */
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 20px;
+      left: 0;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 0 0 5px 5px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+      min-width: 140px;
+      padding: 4px 0;
+      z-index: 1001;
+      color: #000;
+    }
+
+    .dropdown div {
+      padding: 4px 15px;
+      font-size: 12px;
+    }
+
+    .dropdown div:hover {
+      background: #2b73e3;
+      color: #fff;
+    }
+
+    .dropdown hr {
+      border: 0;
+      border-top: 1px solid #ddd;
+      margin: 4px 0;
+    }
+
+    .menu-item.active .dropdown {
+      display: block;
+    }
+
+    /* --- DESKTOP AREA --- */
+    #desktop {
+      flex: 1;
+      position: relative;
+      padding: 20px;
+    }
+
+    /* --- OS X WINDOWS --- */
+    .window {
+      position: absolute;
+      width: 450px;
+      background: #ededed;
+      border-radius: 8px 8px 5px 5px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      visibility: hidden;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      z-index: 1;
+    }
+
+    .window.active {
+      visibility: visible;
+      z-index: 10;
+    }
+
+    .title-bar {
+      height: 28px;
+      background: linear-gradient(to bottom, #e6e6e6, #d2d2d2);
+      border-bottom: 1px solid #b3b3b3;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      position: relative;
+      cursor: move;
+    }
+
+    /* Aqua Traffic Lights */
+    .window-controls {
+      display: flex;
+      gap: 7px;
+      z-index: 2;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+    }
+
+    .close { background: #ff5f56; border: 1px solid #e0443e; }
+    .minimize { background: #ffbd2e; border: 1px solid #dea123; }
+    .zoom { background: #27c93f; border: 1px solid #1aab29; }
+
+    .window-title {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      font-size: 13px;
+      font-weight: bold;
+      color: #333;
+      left: 0;
+      pointer-events: none;
+    }
+
+    .window-body {
+      padding: 18px;
+      background: #ffffff;
+      flex: 1;
+      overflow-y: auto;
+      font-size: 14px;
+      color: #333;
+      user-select: text;
+    }
+
+    /* --- TERMINAL SPECIFIC STYLES --- */
+    .terminal-body {
+      background-color: #1a1a1a !important;
+      color: #33ff33 !important;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 13px;
+      min-height: 250px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #terminal-output p {
+      margin-bottom: 6px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+
+    .terminal-input-line {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+    }
+
+    .prompt-label {
+      color: #33ff33;
+      margin-right: 8px;
+    }
+
+    #term-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #33ff33;
+      font-family: inherit;
+      font-size: inherit;
+      flex: 1;
+    }
+
+    /* --- BOTTOM OS X DOCK --- */
+    #dock-container {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    #dock {
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 16px;
+      padding: 6px 12px;
+      display: flex;
+      gap: 15px;
+      pointer-events: auto;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    .dock-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .dock-item:hover {
+      transform: scale(1.2) translateY(-8px);
+    }
+
+    .dock-icon {
+      font-size: 32px;
+    }
+
+    .dock-label {
+      font-size: 10px;
+      color: white;
+      text-shadow: 1px 1px 2px black;
+      margin-top: 2px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="spinner"></div>
-        <p>Redirecting to the English version... If you are not redirected automatically, <a href="./en/index.html">click here</a>.</p>
+
+  <div id="menubar">
+    <div class="menu-left">
+      <div class="menu-item apple-logo" onclick="toggleMenu(event, 'apple-menu')">
+        
+        <div id="apple-menu" class="dropdown">
+          <div>About This Mac</div>
+          <hr>
+          <div>System Preferences...</div>
+          <div>App Store...</div>
+          <hr>
+          <div onclick="location.reload()">Restart...</div>
+        </div>
+      </div>
+      <div class="menu-item" onclick="toggleMenu(event, 'file-menu')">
+        <strong>Portfolio</strong>
+        <div id="file-menu" class="dropdown">
+          <div onclick="openWindow('win-about')">About Me</div>
+          <div onclick="openWindow('win-projects')">Projects</div>
+          <div onclick="openWindow('win-terminal')">Terminal / Contact</div>
+        </div>
+      </div>
+      <div class="menu-item" onclick="toggleMenu(event, 'view-menu')">
+        View
+        <div id="view-menu" class="dropdown">
+          <div onclick="closeAll()">Close All Windows</div>
+        </div>
+      </div>
     </div>
+    <div class="menu-right">
+      <span id="clock">12:00 PM</span>
+    </div>
+  </div>
+
+  <div id="desktop"></div>
+
+  <div id="win-about" class="window" style="top: 60px; left: 80px;">
+    <div class="title-bar">
+      <div class="window-controls">
+        <div class="dot close" onclick="closeWindow('win-about')"></div>
+        <div class="dot minimize" onclick="closeWindow('win-about')"></div>
+        <div class="dot zoom"></div>
+      </div>
+      <div class="window-title">About Me</div>
+    </div>
+    <div class="window-body">
+      <h2>Welcome! 👋</h2>
+      <br>
+      <p>I'm a developer crafting modern interactive web experiences wrapped in iconic nostalgic interfaces.</p>
+      <br>
+      <p>Feel free to browse my projects or launch the <strong>Terminal</strong> to send me a direct message!</p>
+    </div>
+  </div>
+
+  <div id="win-projects" class="window" style="top: 100px; left: 140px;">
+    <div class="title-bar">
+      <div class="window-controls">
+        <div class="dot close" onclick="closeWindow('win-projects')"></div>
+        <div class="dot minimize" onclick="closeWindow('win-projects')"></div>
+        <div class="dot zoom"></div>
+      </div>
+      <div class="window-title">Projects</div>
+    </div>
+    <div class="window-body">
+      <h3>🚀 Interactive Desktop Portfolio</h3>
+      <p style="color:#666; font-size:12px; margin-bottom:10px;">HTML5 / CSS3 / Vanilla JS</p>
+      <p>A functional recreation of retro desktop environments in the browser.</p>
+      <hr style="margin: 15px 0;">
+      <h3>🎮 Arcade Engine</h3>
+      <p style="color:#666; font-size:12px; margin-bottom:10px;">Canvas API</p>
+      <p>Classic arcade game simulations built from scratch.</p>
+    </div>
+  </div>
+
+  <div id="win-terminal" class="window" style="top: 140px; left: 200px; width: 500px;">
+    <div class="title-bar">
+      <div class="window-controls">
+        <div class="dot close" onclick="closeWindow('win-terminal')"></div>
+        <div class="dot minimize" onclick="closeWindow('win-terminal')"></div>
+        <div class="dot zoom"></div>
+      </div>
+      <div class="window-title">Terminal - bash - 80x24</div>
+    </div>
+    <div class="window-body terminal-body" onclick="document.getElementById('term-input').focus()">
+      <div id="terminal-output">
+        <p>Mac OS X [Version 10.4.11]</p>
+        <p>Type <strong>'contact'</strong> to launch the interactive contact wizard, or <strong>'help'</strong> for options.</p>
+        <br>
+      </div>
+      <div class="terminal-input-line">
+        <span class="prompt-label" id="prompt-text">user@macosx:~$</span>
+        <input type="text" id="term-input" autocomplete="off" spellcheck="false" autofocus />
+      </div>
+    </div>
+  </div>
+
+  <div id="dock-container">
+    <div id="dock">
+      <div class="dock-item" onclick="openWindow('win-about')">
+        <div class="dock-icon">👤</div>
+        <div class="dock-label">About</div>
+      </div>
+      <div class="dock-item" onclick="openWindow('win-projects')">
+        <div class="dock-icon">📁</div>
+        <div class="dock-label">Projects</div>
+      </div>
+      <div class="dock-item" onclick="openWindow('win-terminal')">
+        <div class="dock-icon">🖥️</div>
+        <div class="dock-label">Terminal</div>
+      </div>
+    </div>
+  </div>
+
+  <script></script>
 </body>
 </html>
