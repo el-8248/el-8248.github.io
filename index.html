@@ -272,8 +272,6 @@
           <hr>
           <div>System Preferences...</div>
           <div>App Store...</div>
-          <hr>
-          <div onclick="location.reload()">Restart...</div>
         </div>
       </div>
       <div class="menu-item" onclick="toggleMenu(event, 'file-menu')">
@@ -291,8 +289,9 @@
         </div>
       </div>
     </div>
-    <div class="menu-right">
-      <span id="clock">12:00 PM</span>
+    <div class="menu-item">
+        <span id="user-clock"></span>
+        <span style="color: green;" id="time-diff"></span>
     </div>
   </div>
 
@@ -347,8 +346,10 @@
     </div>
     <div class="window-body terminal-body" onclick="document.getElementById('term-input').focus()">
       <div id="terminal-output">
-        <p>Mac OS X [Version 10.4.11]</p>
-        <p>Type <strong>'contact'</strong> to launch the interactive contact wizard, or <strong>'help'</strong> for options.</p>
+        <p>Welcome to my corner of the internet!</p>
+        <p>My name is <strong>el</strong> and I made this as a space to display some of my <strong onclick="openWindow('win-projects')">projects</strong>. You can learn more about me on the <strong onclick="openWindow('win-about')">About</strong> page.</p>
+        <br>
+        <p>Type <strong>'help'</strong> to list available commands</p>
         <br>
       </div>
       <div class="terminal-input-line">
