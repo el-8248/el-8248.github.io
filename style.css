@@ -8,8 +8,7 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Lucida Grande", "Segoe UI", Roboto, sans-serif;
-      /* Classic Aqua Gradient Wallpaper */
-      background: radial-gradient(lightblue,darkcyan);
+      background: radial-gradient(lightblue,darkblue);
       height: 100vh;
       overflow: hidden;
       display: flex;
@@ -102,7 +101,7 @@
     .window {
       position: absolute;
       width: 450px;
-      background: #ededed;
+      background: black;
       border-radius: 8px 8px 5px 5px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
       display: flex;
@@ -120,8 +119,8 @@
 
     .title-bar {
       height: 28px;
-      background: linear-gradient(to bottom, #e6e6e6, #d2d2d2);
-      border-bottom: 1px solid #b3b3b3;
+      background: linear-gradient(to bottom, #6e6e6e, #2d2d2d);
+      border-bottom: 1px solid #3b3b3b;
       display: flex;
       align-items: center;
       padding: 0 10px;
@@ -141,12 +140,16 @@
       height: 12px;
       border-radius: 50%;
       cursor: pointer;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+      box-shadow: inset 0 1px 0 rgba(200,200,200,0.5);
     }
 
     .close { background: #ff5f56; border: 1px solid #e0443e; }
     .minimize { background: #ffbd2e; border: 1px solid #dea123; }
     .zoom { background: #27c93f; border: 1px solid #1aab29; }
+
+    .close:hover { background: #505050; border: 3px solid #e0443e; }
+    .minimize:hover { background: #505050; border: 3px solid #dea123; }
+    .zoom:hover { background: #505050; border: 3px solid #1aab29; }
 
     .window-title {
       position: absolute;
@@ -154,18 +157,18 @@
       text-align: center;
       font-size: 13px;
       font-weight: bold;
-      color: #333;
+      color: lightblue;
       left: 0;
       pointer-events: none;
     }
 
     .window-body {
       padding: 18px;
-      background: #ffffff;
+      background: darkslategray;
       flex: 1;
       overflow-y: auto;
       font-size: 14px;
-      color: #333;
+      color: white;
       user-select: text;
     }
 

@@ -1,5 +1,6 @@
-// --- CONFIGURATION ---
-// Paste your Discord Webhook URL below:
+// Hello Devs
+// yeah, putting this here is not at all anywhere close to basic security
+// but like it's discord, oh no I get spammed on the platform I don't have notifications on for
 const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1357468392864485547/AWMZlnNaH-odeVVqRjEJAUVKSkP1QklDQP84hqdVxt7thXzvdioP5Io3xcSFdiUsHvhb";
 
 // --- WINDOW MANAGEMENT ---
