@@ -133,7 +133,7 @@ termInput.addEventListener('keydown', function(e) {
             promptLabel.innerText = "Enter your Name:";
             break;
         case 'help':
-            printTerm("Available commands: 'contact', 'clear', 'about', 'projects' or type exit to exit");
+            printTerm("Available commands: 'contact', 'clear', 'about', 'projects', '3d' or type exit to exit");
             break;
         case 'clear':
             termOutput.innerHTML = '';
@@ -143,6 +143,9 @@ termInput.addEventListener('keydown', function(e) {
             break;
         case 'projects':
             openWindow('win-projects');
+            break;
+        case '3d':
+            openWindow('win-3d');
             break;
         case 'exit':
             closeWindow('win-terminal');
