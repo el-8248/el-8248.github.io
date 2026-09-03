@@ -222,9 +222,9 @@
     }
 
     #dock {
-      background: rgba(255, 255, 255, 0.35);
+      background: radial-gradient( #505050,#2d2d2d);
       backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      border: 2px solid rgba(55, 55, 55, 0.75);
       border-radius: 16px;
       padding: 6px 12px;
       display: flex;
