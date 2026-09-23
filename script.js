@@ -134,7 +134,7 @@ termInput.addEventListener('keydown', function(e) {
             promptLabel.innerText = "Enter your Name:";
             break;
         case 'help':
-            printTerm("Available commands: 'contact', 'clear', 'about', 'projects', '3d' or type exit to exit");
+            printTerm("Available commands: 'contact', 'clear', 'about', 'projects', '3d', 'gallery' or type exit to exit");
             break;
         case 'clear':
             termOutput.innerHTML = '';
@@ -147,6 +147,9 @@ termInput.addEventListener('keydown', function(e) {
             break;
         case '3d':
             openWindow('win-3d');
+            break;
+        case 'gallery':
+            openWindow('win-gallery');
             break;
         case 'exit':
             closeWindow('win-terminal');
@@ -251,3 +254,47 @@ function sendDiscordWebhook(data) {
 
 // Auto-open Terminal on load
 openWindow('win-terminal');
+
+// --- GALLERY LOGIC ---
+const galleryData = {
+  school: [
+    { title: "A fellow photographer", desc: "One of my friends in the stairwell for our 'Indoor Natural Light' project.", img: "photos/school/1.jpg" },
+    { title: "Mountain Peak", desc: "Snowy mountains in the distance.", img: "https://picsum.photos/id/11/600/400" },
+    { title: "Ocean Waves", desc: "Crashing waves on a rocky shore.", img: "https://picsum.photos/id/12/600/400" }
+  ],
+  urban: [
+    { title: "City Skyline", desc: "Downtown view at dusk.", img: "https://picsum.photos/id/13/600/400" },
+    { title: "Street Art", desc: "Vibrant graffiti alleyway.", img: "https://picsum.photos/id/14/600/400" }
+  ],
+  portraits: [
+    { title: "Stranger", desc: "A passing face in the crowd.", img: "https://picsum.photos/id/15/600/400" }
+  ]
+};
+
+function openGalleryFolder(folderKey, folderName) {
+  document.getElementById('gallery-folders').style.display = 'none';
+  document.getElementById('gallery-feed').style.display = 'block';
+  document.getElementById('gallery-folder-title').innerText = folderName;
+  
+  const feedContent = document.getElementById('gallery-feed-content');
+  feedContent.innerHTML = '';
+  
+  const photos = galleryData[folderKey] || [];
+  photos.forEach(photo => {
+    const item = document.createElement('div');
+    item.className = 'feed-item';
+    item.innerHTML = `
+      <img src="${photo.img}" alt="${photo.title}">
+      <div class="feed-details">
+        <div class="feed-title">${photo.title}</div>
+        <div class="feed-desc">${photo.desc}</div>
+      </div>
+    `;
+    feedContent.appendChild(item);
+  });
+}
+
+function closeGalleryFolder() {
+  document.getElementById('gallery-folders').style.display = 'grid';
+  document.getElementById('gallery-feed').style.display = 'none';
+}
