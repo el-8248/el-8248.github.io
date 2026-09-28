@@ -35,6 +35,21 @@
           <div onclick="closeAll()">Close All Windows</div>
         </div>
       </div>
+      <div class="menu-item" onclick="toggleMenu(event, '8248-menu')">
+        My Robotics Team
+        <div id="8248-menu" class="dropdown">
+          <div>Links</div>
+          <hr>
+          <div onclick="window.open('https://chainlynx8248.com')">Team Website</div>
+          <div onclick="window.open('https://www.instagram.com/chainlynxrobotics/')">Instagram</div>
+          <div onclick="window.open('https://www.thebluealliance.com/team/8248')">The Blue Alliance</div>
+          <hr>
+          <hr>
+          <div>Team Resources</div>
+          <hr>
+          <div onclick="window.open('https://git.emeraldcityrobotics.org/')">ECRF Git</div>
+        </div>
+      </div>
     </div>
     <div class="menu-item">
         <span id="user-clock"></span>
@@ -56,11 +71,13 @@
     <div class="window-body">
       <h2>Welcome! 👋</h2>
       <br>
-      <p>I'm a developer crafting modern interactive web experiences wrapped in iconic nostalgic interfaces.</p>
+      <p>Hello, I'm Elle. Welcome to my portfolio website.</p>
       <br>
-      <p>Feel free to browse my projects or launch the <strong>Terminal</strong> to send me a direct message!</p>
+      <p></p>
       <br>
-      <p>This Site is Not Endorsed, Sponsored or Created by <a href="https:Apple.com">Apple Inc.</a> All copyrights, trademarks and IP are theirs.</p>
+      <p>Feel free to browse my projects or launch the <strong>Terminal</strong> and run the "contact" command to send me a direct message!</p>
+      <br>
+      <p>Also, check out my Instagram <a href="https://instagram.com/ewb.206">ewb.206</a>, Github <a href="Github.com/el-8248">el-8248</a>, & <a href="https://www.linkedin.com/in/elliott-weston-ball/">LinkedIn</a> </p>
     </div>
   </div>
 
@@ -81,6 +98,19 @@
       <a href="https://pdf.e11e.net"><h3>PDF Viewer with Computer Vision</h3></a>
       <p style="color:#666; font-size:12px; margin-bottom:10px;">HTML & TensorFlowJS</p>
       <p>Webpage built for viewing and scrolling PDFs without touching your computer.</p>
+    </div>
+  </div>
+  <div id="win-links" class="window" style="top: 100px; left: 140px;">
+    <div class="title-bar">
+      <div class="window-controls">
+        <div class="dot close" onclick="closeWindow('win-links')"></div>
+        <div class="dot minimize" onclick="closeWindow('win-links')"></div>
+        <div class="dot zoom"></div>
+      </div>
+      <div class="window-title">Favorite Links</div>
+    </div>
+    <div class="window-body">
+      coming soon
     </div>
   </div>
 
@@ -170,6 +200,10 @@
       <div class="dock-item" onclick="openWindow('win-projects')">
         <div class="dock-icon">📁</div>
         <div class="dock-label">Projects</div>
+      </div>
+      <div class="dock-item" onclick="openWindow('win-links')">
+        <div class="dock-icon">🌐</div>
+        <div class="dock-label">Links</div>
       </div>
       <div class="dock-item" onclick="openWindow('win-3d')">
         <div class="dock-icon">🖨️</div>
