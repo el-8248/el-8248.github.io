@@ -33,7 +33,7 @@ document.querySelectorAll('.window').forEach(win => {
     win.addEventListener('mousedown', () => bringToFront(win));
 
     titleBar.addEventListener('mousedown', (e) => {
-    if(e.target.classList.contains('dot')) return; // ignore clicks on close dots
+    if(e.target.classList.contains('dot')) return;
     isDragging = true;
     offsetX = e.clientX - win.offsetLeft;
     offsetY = e.clientY - win.offsetTop;
@@ -258,16 +258,14 @@ openWindow('win-terminal');
 // --- GALLERY LOGIC ---
 const galleryData = {
   school: [
-    { title: "A fellow photographer", desc: "One of my friends in the stairwell for our 'Indoor Natural Light' project.", img: "photos/school/1.jpg" },
-    { title: "Mountain Peak", desc: "Snowy mountains in the distance.", img: "https://picsum.photos/id/11/600/400" },
-    { title: "Ocean Waves", desc: "Crashing waves on a rocky shore.", img: "https://picsum.photos/id/12/600/400" }
+    { title: "A fellow photographer", desc: "One of my friends in the stairwell for our 'Indoor Natural Light' project.", img: "photos/school/1.jpg" }
   ],
-  urban: [
-    { title: "City Skyline", desc: "Downtown view at dusk.", img: "https://picsum.photos/id/13/600/400" },
-    { title: "Street Art", desc: "Vibrant graffiti alleyway.", img: "https://picsum.photos/id/14/600/400" }
+  gen: [
+    { title: "Placeholder", desc: "placeholder", img: "https://picsum.photos/id/13/600/400" }
   ],
-  portraits: [
-    { title: "Stranger", desc: "A passing face in the crowd.", img: "https://picsum.photos/id/15/600/400" }
+  lwcc: [
+    { title: "Placeholder", desc: "placeholder", img: "https://picsum.photos/id/16/600/400" }
+  ]
   ]
 };
 
