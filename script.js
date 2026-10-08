@@ -151,6 +151,9 @@ termInput.addEventListener('keydown', function(e) {
         case 'gallery':
             openWindow('win-gallery');
             break;
+        case 'pong':
+            window.open('https://el-8248.github.io/pong/', '_blank');
+            break;
         case 'exit':
             closeWindow('win-terminal');
             break;

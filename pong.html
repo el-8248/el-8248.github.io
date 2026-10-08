@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pong</title>
+    <style>
+      :root {
+        --bg: #0f172a;
+        --panel: #111827;
+        --text: #e5e7eb;
+        --accent: #38bdf8;
+        --accent-2: #a78bfa;
+        --line: rgba(255, 255, 255, 0.18);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 55%);
+        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .game-shell {
+        background: rgba(17, 24, 39, 0.92);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.55);
+        padding: 14px;
+      }
+
+      canvas {
+        display: block;
+        width: min(88vw, 900px);
+        height: auto;
+        aspect-ratio: 16 / 9;
+        background: linear-gradient(180deg, #0b1120, #101827);
+        border-radius: 12px;
+        border: 2px solid rgba(148, 163, 184, 0.4);
+      }
+
+      .hud {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 12px;
+        padding: 0 6px;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .score {
+        display: flex;
+        gap: 1.2rem;
+      }
+
+      .score span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .pill {
+        display: inline-block;
+        padding: 0.3rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-shell">
+      <div class="hud">
+        <div class="score">
+          <span><span class="pill" id="leftScore">0</span> Left</span>
+          <span><span class="pill" id="rightScore">0</span> Bot</span>
+        </div>
+        <div id="status">Press Space to Serve</div>
+      </div>
+      <canvas id="gameCanvas" width="900" height="506"></canvas>
+    </div>
+
+    <script>
+      const canvas = document.getElementById('gameCanvas');
+      const ctx = canvas.getContext('2d');
+      const leftScoreEl = document.getElementById('leftScore');
+      const rightScoreEl = document.getElementById('rightScore');
+      const statusEl = document.getElementById('status');
+
+      const game = {
+        width: canvas.width,
+        height: canvas.height,
+        running: false,
+        lastTime: 0,
+        paddleSpeed: 420,
+        ballSpeed: 360,
+        maxScore: 7,
+        winner: null,
+      };
+
+      const keys = {
+        w: false,
+        s: false,
+      };
+
+      const leftPaddle = { x: 18, y: game.height / 2 - 55, width: 14, height: 110, color: '#38bdf8' };
+      const rightPaddle = { x: game.width - 18 - 14, y: game.height / 2 - 55, width: 14, height: 110, color: '#a78bfa' };
+      const ball = {
+        x: game.width / 2,
+        y: game.height / 2,
+        radius: 9,
+        vx: 0,
+        vy: 0,
+        color: '#f8fafc',
+      };
+
+      const state = {
+        leftScore: 0,
+        rightScore: 0,
+      };
+
+      function resetBall(direction = 1) {
+        ball.x = game.width / 2;
+        ball.y = game.height / 2;
+        const angle = (Math.random() * 1.2 - 0.6); // approx -34° to +34°
+        const speed = game.ballSpeed;
+        ball.vx = Math.cos(angle) * speed * direction;
+        ball.vy = Math.sin(angle) * speed;
+      }
+
+      function serveBall() {
+        if (game.winner) return;
+        resetBall(Math.random() < 0.5 ? -1 : 1);
+        game.running = true;
+        statusEl.textContent = 'Game On';
+      }
+
+      function resetPositions() {
+        leftPaddle.y = game.height / 2 - leftPaddle.height / 2;
+        rightPaddle.y = game.height / 2 - rightPaddle.height / 2;
+        ball.x = game.width / 2;
+        ball.y = game.height / 2;
+        ball.vx = 0;
+        ball.vy = 0;
+      }
+
+      function updateScores() {
+        leftScoreEl.textContent = state.leftScore;
+        rightScoreEl.textContent = state.rightScore;
+      }
+
+      function checkWinner() {
+        if (state.leftScore >= game.maxScore || state.rightScore >= game.maxScore) {
+          game.winner = state.leftScore > state.rightScore ? 'Left Player Wins!' : 'Right Player Wins!';
+          statusEl.textContent = game.winner;
+          game.running = false;
+          return true;
+        }
+        return false;
+      }
+
+      function handlePaddleMovement(paddle, upKey, downKey, dt) {
+        if (keys[upKey]) {
+          paddle.y -= game.paddleSpeed * dt;
+        }
+        if (keys[downKey]) {
+          paddle.y += game.paddleSpeed * dt;
+        }
+        paddle.y = Math.max(0, Math.min(game.height - paddle.height, paddle.y));
+      }
+
+      function updateBot(dt) {
+        const targetY = rightPaddle.height / 2;
+        let target = game.height / 2;
+
+        if (ball.vx > 0) {
+          const timeToPaddle = (rightPaddle.x - ball.radius - ball.x) / ball.vx;
+          const projectedY = ball.y + ball.vy * Math.max(0, timeToPaddle);
+          const wallSpan = game.height - ball.radius * 2;
+          const reflectedY = ((projectedY - ball.radius) % (wallSpan * 2) + wallSpan * 2) % (wallSpan * 2);
+          target = ball.radius + (reflectedY <= wallSpan ? reflectedY : wallSpan * 2 - reflectedY);
+        }
+
+        const difference = target - (rightPaddle.y + targetY);
+        const maxMovement = game.paddleSpeed * 0.78 * dt;
+        if (Math.abs(difference) > 6) {
+          rightPaddle.y += Math.sign(difference) * Math.min(Math.abs(difference), maxMovement);
+        }
+        rightPaddle.y = Math.max(0, Math.min(game.height - rightPaddle.height, rightPaddle.y));
+      }
+
+      function updateBall(dt) {
+        if (!game.running) return;
+
+        ball.x += ball.vx * dt;
+        ball.y += ball.vy * dt;
+
+        if (ball.y - ball.radius <= 0 || ball.y + ball.radius >= game.height) {
+          ball.y = Math.max(ball.radius, Math.min(game.height - ball.radius, ball.y));
+          ball.vy *= -1;
+        }
+
+        const leftHit = ball.x - ball.radius <= leftPaddle.x + leftPaddle.width &&
+          ball.x - ball.radius >= leftPaddle.x &&
+          ball.y >= leftPaddle.y &&
+          ball.y <= leftPaddle.y + leftPaddle.height;
+
+        const rightHit = ball.x + ball.radius >= rightPaddle.x &&
+          ball.x + ball.radius <= rightPaddle.x + rightPaddle.width &&
+          ball.y >= rightPaddle.y &&
+          ball.y <= rightPaddle.y + rightPaddle.height;
+
+        if (leftHit && ball.vx < 0) {
+          const relativeIntersect = (ball.y - (leftPaddle.y + leftPaddle.height / 2)) / (leftPaddle.height / 2);
+          const bounceAngle = relativeIntersect * (Math.PI / 3);
+          const speed = Math.hypot(ball.vx, ball.vy) * 1.04;
+          ball.vx = Math.cos(bounceAngle) * speed;
+          ball.vy = Math.sin(bounceAngle) * speed;
+          ball.x = leftPaddle.x + leftPaddle.width + ball.radius;
+        }
+
+        if (rightHit && ball.vx > 0) {
+          const relativeIntersect = (ball.y - (rightPaddle.y + rightPaddle.height / 2)) / (rightPaddle.height / 2);
+          const bounceAngle = relativeIntersect * (Math.PI / 3);
+          const speed = Math.hypot(ball.vx, ball.vy) * 1.04;
+          ball.vx = -Math.cos(bounceAngle) * speed;
+          ball.vy = Math.sin(bounceAngle) * speed;
+          ball.x = rightPaddle.x - ball.radius;
+        }
+
+        if (ball.x < 0) {
+          state.rightScore += 1;
+          updateScores();
+          if (!checkWinner()) {
+            game.running = false;
+            statusEl.textContent = 'Right Scores! Press Space';
+            resetPositions();
+          }
+        }
+
+        if (ball.x > game.width) {
+          state.leftScore += 1;
+          updateScores();
+          if (!checkWinner()) {
+            game.running = false;
+            statusEl.textContent = 'Left Scores! Press Space';
+            resetPositions();
+          }
+        }
+      }
+
+      function drawCenterLine() {
+        ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([12, 14]);
+        ctx.beginPath();
+        ctx.moveTo(game.width / 2, 0);
+        ctx.lineTo(game.width / 2, game.height);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      function drawPaddle(paddle) {
+        ctx.fillStyle = paddle.color;
+        ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+      }
+
+      function drawBall() {
+        ctx.beginPath();
+        ctx.fillStyle = ball.color;
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, game.width, game.height);
+        drawCenterLine();
+        drawPaddle(leftPaddle);
+        drawPaddle(rightPaddle);
+        drawBall();
+      }
+
+      function gameLoop(timestamp) {
+        const dt = Math.min((timestamp - game.lastTime) / 1000 || 0, 0.025);
+        game.lastTime = timestamp;
+
+        handlePaddleMovement(leftPaddle, 'w', 's', dt);
+        updateBot(dt);
+        updateBall(dt);
+        render();
+        requestAnimationFrame(gameLoop);
+      }
+
+      document.addEventListener('keydown', (event) => {
+        const key = event.key;
+        if (key in keys) {
+          keys[key] = true;
+          event.preventDefault();
+        }
+
+        if (key === ' ' || key === 'Spacebar') {
+          event.preventDefault();
+          if (!game.running && !game.winner) {
+            serveBall();
+          }
+        }
+      });
+
+      document.addEventListener('keyup', (event) => {
+        const key = event.key;
+        if (key in keys) {
+          keys[key] = false;
+        }
+      });
+
+      updateScores();
+      resetPositions();
+      render();
+      requestAnimationFrame(gameLoop);
+    </script>
+  </body>
+</html>
