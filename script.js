@@ -138,6 +138,7 @@ termInput.addEventListener('keydown', function(e) {
             break;
         case '8248':
             printTerm("Secret commands unlocked! Available commands: 'doom', 'mc', 'pong'");
+            printTerm("Welcome to the dark side...")
             break;
         case 'clear':
             termOutput.innerHTML = '';
