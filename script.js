@@ -148,6 +148,9 @@ termInput.addEventListener('keydown', function(e) {
         case '3d':
             openWindow('win-3d');
             break;
+        case 'uwu':
+            printTerm("uwu :3");
+            break;
         case 'gallery':
             openWindow('win-gallery');
             break;
