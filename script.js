@@ -152,6 +152,9 @@ termInput.addEventListener('keydown', function(e) {
         case '3d':
             openWindow('win-3d');
             break;
+        case 'tba':
+            printTerm("This command is not yet implemented. Please check back later.");
+            break;
         case 'uwu':
             printTerm("uwu :3");
             break;
