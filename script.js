@@ -151,6 +151,9 @@ termInput.addEventListener('keydown', function(e) {
         case 'uwu':
             printTerm("uwu :3");
             break;
+        case 'doom':
+            window.open('/doom/', '_blank');
+            break;
         case 'mc':
             window.open('/mc/', '_blank');
             break;
