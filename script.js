@@ -137,7 +137,7 @@ termInput.addEventListener('keydown', function(e) {
             printTerm("Available commands: 'contact', 'clear', 'about', 'projects', '3d', 'gallery' or type exit to exit enter in the secret code to unlock the secret commands");
             break;
         case '8248':
-            printTerm("Secret commands unlocked! Available commands: 'uwu', 'doom', 'mc', 'pong'");
+            printTerm("Secret commands unlocked! Available commands: 'doom', 'mc', 'pong'");
             break;
         case 'clear':
             termOutput.innerHTML = '';
