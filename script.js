@@ -269,7 +269,6 @@ const galleryData = {
   lwcc: [
     { title: "Placeholder", desc: "placeholder", img: "https://picsum.photos/id/16/600/400" }
   ]
-  ]
 };
 
 function openGalleryFolder(folderKey, folderName) {
