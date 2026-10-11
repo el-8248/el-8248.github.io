@@ -8,6 +8,13 @@ let zIndexCounter = 10;
 
 function openWindow(id) {
     const win = document.getElementById(id);
+    if (id === 'win-3d') {
+        const iframe = win.querySelector('iframe[data-src]');
+        if (iframe) {
+            iframe.src = iframe.dataset.src;
+            delete iframe.dataset.src;
+        }
+    }
     win.classList.add('active');
     bringToFront(win);
 }
