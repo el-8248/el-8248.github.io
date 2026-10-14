@@ -69,15 +69,7 @@
       <div class="window-title">About Me</div>
     </div>
     <div class="window-body">
-      <h2>Welcome! 👋</h2>
-      <br>
-      <p>Hello, I'm Elle. Welcome to my portfolio website.</p>
-      <br>
-      <p></p>
-      <br>
-      <p>Feel free to browse my projects or launch the <strong>Terminal</strong> and run the "contact" command to send me a direct message!</p>
-      <br>
-      <p>Also, check out my Instagram <a href="https://instagram.com/ewb.206">ewb.206</a>, Github <a href="Github.com/el-8248">el-8248</a>, & <a href="https://www.linkedin.com/in/elliott-weston-ball/">LinkedIn</a> </p>
+      <div class="markdown-content" data-markdown="content/about.md"></div>
     </div>
   </div>
 
@@ -91,13 +83,7 @@
       <div class="window-title">Projects</div>
     </div>
     <div class="window-body">
-      <h3>Desktop-Style Portfolio</h3>
-      <p style="color:#666; font-size:12px; margin-bottom:10px;">HTML5 / CSS3 / Vanilla JS</p>
-      <p>A functional recreation of Mac OS-X in the browser, with a personal touch.</p>
-      <hr style="margin: 15px 0;">
-      <a href="https://pdf.e11e.net"><h3>PDF Viewer with Computer Vision</h3></a>
-      <p style="color:#666; font-size:12px; margin-bottom:10px;">HTML & TensorFlowJS</p>
-      <p>Webpage built for viewing and scrolling PDFs without touching your computer.</p>
+      <div class="markdown-content" data-markdown="content/projects.md"></div>
     </div>
   </div>
   <div id="win-links" class="window" style="top: 100px; left: 140px;">
@@ -110,7 +96,7 @@
       <div class="window-title">Favorite Links</div>
     </div>
     <div class="window-body">
-      coming soon
+      <div class="markdown-content" data-markdown="content/links.md"></div>
     </div>
   </div>
 
@@ -138,16 +124,10 @@
       <div class="window-title">Terminal - bash</div>
     </div>
     <div class="window-body terminal-body" onclick="document.getElementById('term-input').focus()">
-      <div id="terminal-output">
-        <p>Welcome to my corner of the internet!</p>
-        <p>My name is <strong>el</strong> and I made this as a space to display some of my <strong onclick="openWindow('win-projects')">Projects</strong>. You can learn more about me on the <strong onclick="openWindow('win-about')">About</strong> page.</p>
-        <br>
-        <p>Type <strong>'help'</strong> to list available commands</p>
-        <br>
-      </div>
+      <div id="terminal-output" class="markdown-content terminal-markdown" data-markdown="content/terminal.md"></div>
       <div class="terminal-input-line">
         <span class="prompt-label" id="prompt-text">guest@e11e.net:~$</span>
-        <input type="text" id="term-input" autocomplete="off" spellcheck="false" autofocus />
+        <input type="text" id="term-input" autocomplete="off" spellcheck="false" autofocus disabled />
       </div>
     </div>
   </div>
@@ -162,30 +142,13 @@
       <div class="window-title">Photos</div>
     </div>
     <div class="window-body">
-      <!-- Folders View -->
-      <div id="gallery-folders" class="gallery-grid">
-        <div class="folder-item" onclick="openGalleryFolder('school', 'School')">
-          <div class="folder-icon">📁</div>
-          <div class="folder-label">School Photo Class</div>
-        </div>
-        <div class="folder-item" onclick="openGalleryFolder('gen', 'General')">
-          <div class="folder-icon">📁</div>
-          <div class="folder-label">General Photography</div>
-        </div>
-        <div class="folder-item" onclick="openGalleryFolder('lwcc', 'Lake Washington Cars & Coffee')">
-          <div class="folder-icon">📁</div>
-          <div class="folder-label">Lake Washington Cars & Coffee</div>
-        </div>
-      </div>
-      
-      <!-- Scrolling Feed View (Hidden by default) -->
-      <div id="gallery-feed" style="display: none;">
-        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+      <div id="gallery-folders" class="gallery-grid markdown-content" data-markdown="content/photos.md"></div>
+      <div id="gallery-feed" class="gallery-feed-view" hidden>
+        <div class="gallery-feed-header">
           <button class="gallery-back-btn" onclick="closeGalleryFolder()">← Back</button>
-          <h3 id="gallery-folder-title" style="margin: 0 0 0 15px; color: lightblue;">Folder Title</h3>
+          <h3 id="gallery-folder-title">Folder Title</h3>
         </div>
         <div id="gallery-feed-content" class="gallery-feed-container">
-          <!-- Content injected via JS -->
         </div>
       </div>
     </div>

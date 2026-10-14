@@ -3,11 +3,290 @@
 // but like it's discord, oh no I get spammed on the platform I don't have notifications on for
 const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1357468392864485547/AWMZlnNaH-odeVVqRjEJAUVKSkP1QklDQP84hqdVxt7thXzvdioP5Io3xcSFdiUsHvhb";
 
+// --- MARKDOWN CONTENT ---
+function safeMarkdownUrl(value, baseUrl, isImage) {
+    const url = value.trim();
+    if (!isImage && /^window:win-[a-z0-9-]+$/i.test(url)) return url;
+
+    try {
+        const parsedUrl = new URL(url, baseUrl);
+        const allowedProtocols = isImage
+            ? ['http:', 'https:']
+            : ['http:', 'https:', 'mailto:'];
+        return allowedProtocols.includes(parsedUrl.protocol) ? parsedUrl.href : null;
+    } catch {
+        return null;
+    }
+}
+
+function renderMarkdownInline(text, baseUrl) {
+    const fragment = document.createDocumentFragment();
+    const syntax = /(!\[([^\]]*)\]\(([^)]+)\)|\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*|`([^`]+)`|\*([^*]+)\*)/g;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = syntax.exec(text)) !== null) {
+        fragment.append(document.createTextNode(text.slice(lastIndex, match.index)));
+
+        if (match[1] && match[2] !== undefined) {
+            const imageUrl = safeMarkdownUrl(match[3], baseUrl, true);
+            if (imageUrl) {
+                const image = document.createElement('img');
+                image.src = imageUrl;
+                image.alt = match[2];
+                fragment.append(image);
+            } else {
+                fragment.append(document.createTextNode(match[0]));
+            }
+        } else if (match[4]) {
+            const linkUrl = safeMarkdownUrl(match[5], baseUrl, false);
+            if (linkUrl) {
+                const link = document.createElement('a');
+                link.href = linkUrl;
+                link.textContent = match[4];
+                fragment.append(link);
+            } else {
+                fragment.append(document.createTextNode(match[0]));
+            }
+        } else if (match[6]) {
+            const strong = document.createElement('strong');
+            strong.textContent = match[6];
+            fragment.append(strong);
+        } else if (match[7]) {
+            const code = document.createElement('code');
+            code.textContent = match[7];
+            fragment.append(code);
+        } else if (match[8]) {
+            const emphasis = document.createElement('em');
+            emphasis.textContent = match[8];
+            fragment.append(emphasis);
+        }
+        lastIndex = syntax.lastIndex;
+    }
+
+    fragment.append(document.createTextNode(text.slice(lastIndex)));
+    return fragment;
+}
+
+function renderMarkdown(markdown, baseUrl) {
+    const fragment = document.createDocumentFragment();
+    const lines = markdown.replace(/\r\n?/g, '\n').split('\n');
+    let index = 0;
+
+    while (index < lines.length) {
+        const line = lines[index].trim();
+        if (!line) {
+            index++;
+            continue;
+        }
+
+        const heading = /^(#{1,6})\s+(.+)$/.exec(line);
+        if (heading) {
+            const element = document.createElement(`h${heading[1].length}`);
+            element.append(renderMarkdownInline(heading[2], baseUrl));
+            fragment.append(element);
+            index++;
+            continue;
+        }
+
+        if (/^(---+|___+|\*\*\*+)$/.test(line)) {
+            fragment.append(document.createElement('hr'));
+            index++;
+            continue;
+        }
+
+        const list = /^([-*+]|\d+\.)\s+(.+)$/.exec(line);
+        if (list) {
+            const isOrdered = /^\d/.test(list[1]);
+            const listElement = document.createElement(isOrdered ? 'ol' : 'ul');
+            while (index < lines.length) {
+                const item = /^([-*+]|\d+\.)\s+(.+)$/.exec(lines[index].trim());
+                if (!item || /^\d/.test(item[1]) !== isOrdered) break;
+                const listItem = document.createElement('li');
+                listItem.append(renderMarkdownInline(item[2], baseUrl));
+                listElement.append(listItem);
+                index++;
+            }
+            fragment.append(listElement);
+            continue;
+        }
+
+        if (line.startsWith('> ')) {
+            const quote = document.createElement('blockquote');
+            while (index < lines.length && lines[index].trim().startsWith('> ')) {
+                const paragraph = document.createElement('p');
+                paragraph.append(renderMarkdownInline(lines[index].trim().slice(2), baseUrl));
+                quote.append(paragraph);
+                index++;
+            }
+            fragment.append(quote);
+            continue;
+        }
+
+        const paragraphLines = [];
+        while (index < lines.length && lines[index].trim()
+            && !/^(#{1,6})\s+/.test(lines[index].trim())
+            && !/^(---+|___+|\*\*\*+)$/.test(lines[index].trim())
+            && !/^([-*+]|\d+\.)\s+/.test(lines[index].trim())
+            && !lines[index].trim().startsWith('> ')) {
+            paragraphLines.push(lines[index].trim());
+            index++;
+        }
+        const paragraph = document.createElement('p');
+        paragraph.append(renderMarkdownInline(paragraphLines.join(' '), baseUrl));
+        fragment.append(paragraph);
+    }
+
+    return fragment;
+}
+
+function showGalleryAlbum(album) {
+    const folders = document.getElementById('gallery-folders');
+    const feed = document.getElementById('gallery-feed');
+    const feedContent = document.getElementById('gallery-feed-content');
+    document.getElementById('gallery-folder-title').textContent = album.title;
+    feedContent.replaceChildren();
+
+    let card = null;
+    album.content.forEach(node => {
+        if (node.tagName === 'H3') {
+            card = document.createElement('div');
+            card.className = 'feed-item';
+            const title = document.createElement('div');
+            title.className = 'feed-title';
+            title.textContent = node.textContent;
+            card.append(title);
+            feedContent.append(card);
+        } else if (card) {
+            const content = node.cloneNode(true);
+            if (content.tagName === 'P' && content.querySelector('img')) {
+                content.className = 'feed-image';
+            } else if (content.tagName === 'P') {
+                content.className = 'feed-desc';
+            }
+            card.append(content);
+        } else {
+            feedContent.append(node.cloneNode(true));
+        }
+    });
+
+    folders.hidden = true;
+    feed.hidden = false;
+}
+
+function renderGallery(markdownElement, fragment) {
+    const nodes = Array.from(fragment.childNodes).filter(node =>
+        node.nodeType !== Node.TEXT_NODE || node.textContent.trim()
+    );
+    const albums = [];
+    let currentAlbum = null;
+
+    nodes.forEach(node => {
+        if (node.tagName === 'H2') {
+            currentAlbum = { title: node.textContent, content: [] };
+            albums.push(currentAlbum);
+        } else if (currentAlbum) {
+            currentAlbum.content.push(node);
+        }
+    });
+
+    markdownElement.replaceChildren();
+    albums.forEach(album => {
+        const folder = document.createElement('div');
+        folder.className = 'folder-item';
+        folder.tabIndex = 0;
+        folder.setAttribute('role', 'button');
+
+        const icon = document.createElement('div');
+        icon.className = 'folder-icon';
+        icon.textContent = '📁';
+        const label = document.createElement('div');
+        label.className = 'folder-label';
+        label.textContent = album.title;
+        folder.append(icon, label);
+        folder.addEventListener('click', () => showGalleryAlbum(album));
+        folder.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                showGalleryAlbum(album);
+            }
+        });
+        markdownElement.append(folder);
+    });
+}
+
+async function loadMarkdownContent() {
+    const contentElements = document.querySelectorAll('[data-markdown]');
+    await Promise.all(Array.from(contentElements, async element => {
+        const markdownPath = element.dataset.markdown;
+        try {
+            const response = await fetch(markdownPath);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} loading ${markdownPath}`);
+            }
+            const markdownUrl = new URL(markdownPath, document.baseURI);
+            const fragment = renderMarkdown(await response.text(), markdownUrl);
+
+            if (element.id === 'gallery-folders') {
+                renderGallery(element, fragment);
+            } else {
+                element.replaceChildren(fragment);
+            }
+        } catch (error) {
+            console.error(`Unable to load Markdown content from ${markdownPath}`, error);
+            element.textContent = `Unable to load content (${markdownPath}).`;
+            element.classList.add('markdown-load-error');
+        }
+    }));
+    const termInputElement = document.getElementById('term-input');
+    if (termInputElement) termInputElement.disabled = false;
+}
+
+loadMarkdownContent();
+
+document.addEventListener('click', event => {
+    const link = event.target.closest('a[href^="window:"]');
+    if (!link) return;
+    event.preventDefault();
+    openWindow(link.getAttribute('href').slice('window:'.length));
+});
+
 // --- WINDOW MANAGEMENT ---
 let zIndexCounter = 10;
 
-function openWindow(id) {
+function getOpenWindowIds() {
+    return Array.from(document.querySelectorAll('.window.active'), win => win.id);
+}
+
+function updateWindowUrl() {
+    const url = new URL(window.location.href);
+    const openWindows = getOpenWindowIds().map(id => id.replace(/^win-/, ''));
+    url.searchParams.set('w', openWindows.join(','));
+    window.history.replaceState(null, '', url);
+}
+
+function applyWindowStateFromUrl() {
+    const url = new URL(window.location.href);
+    const hasWindowParameter = url.searchParams.has('w');
+    const requestedWindows = hasWindowParameter
+        ? url.searchParams.get('w').split(',').map(name => name.trim()).filter(Boolean)
+        : ['terminal'];
+    const knownWindowIds = new Set(
+        Array.from(document.querySelectorAll('.window'), win => win.id)
+    );
+
+    document.querySelectorAll('.window.active').forEach(win => win.classList.remove('active'));
+    requestedWindows.forEach(name => {
+        const id = name.startsWith('win-') ? name : `win-${name}`;
+        if (knownWindowIds.has(id)) openWindow(id, false);
+    });
+
+    updateWindowUrl();
+}
+
+function openWindow(id, syncUrl = true) {
     const win = document.getElementById(id);
+    if (!win || !win.classList.contains('window')) return;
     if (id === 'win-3d') {
         const iframe = win.querySelector('iframe[data-src]');
         if (iframe) {
@@ -17,15 +296,22 @@ function openWindow(id) {
     }
     win.classList.add('active');
     bringToFront(win);
+    if (syncUrl) updateWindowUrl();
 }
 
 function closeWindow(id) {
-    document.getElementById(id).classList.remove('active');
+    const win = document.getElementById(id);
+    if (!win) return;
+    win.classList.remove('active');
+    updateWindowUrl();
 }
 
 function closeAll() {
     document.querySelectorAll('.window').forEach(win => win.classList.remove('active'));
+    updateWindowUrl();
 }
+
+window.addEventListener('popstate', applyWindowStateFromUrl);
 
 function bringToFront(win) {
     zIndexCounter++;
@@ -278,46 +564,10 @@ function sendDiscordWebhook(data) {
     });
 }
 
-// Auto-open Terminal on load
-openWindow('win-terminal');
-
-// --- GALLERY LOGIC ---
-const galleryData = {
-  school: [
-    { title: "A fellow photographer", desc: "One of my friends in the stairwell for our 'Indoor Natural Light' project.", img: "photos/school/1.jpg" }
-  ],
-  gen: [
-    { title: "Placeholder", desc: "placeholder", img: "https://picsum.photos/id/13/600/400" }
-  ],
-  lwcc: [
-    { title: "Placeholder", desc: "placeholder", img: "https://picsum.photos/id/16/600/400" }
-  ]
-};
-
-function openGalleryFolder(folderKey, folderName) {
-  document.getElementById('gallery-folders').style.display = 'none';
-  document.getElementById('gallery-feed').style.display = 'block';
-  document.getElementById('gallery-folder-title').innerText = folderName;
-  
-  const feedContent = document.getElementById('gallery-feed-content');
-  feedContent.innerHTML = '';
-  
-  const photos = galleryData[folderKey] || [];
-  photos.forEach(photo => {
-    const item = document.createElement('div');
-    item.className = 'feed-item';
-    item.innerHTML = `
-      <img src="${photo.img}" alt="${photo.title}">
-      <div class="feed-details">
-        <div class="feed-title">${photo.title}</div>
-        <div class="feed-desc">${photo.desc}</div>
-      </div>
-    `;
-    feedContent.appendChild(item);
-  });
-}
+// Restore the requested windows, or open Terminal by default.
+applyWindowStateFromUrl();
 
 function closeGalleryFolder() {
-  document.getElementById('gallery-folders').style.display = 'grid';
-  document.getElementById('gallery-feed').style.display = 'none';
+  document.getElementById('gallery-folders').hidden = false;
+  document.getElementById('gallery-feed').hidden = true;
 }
