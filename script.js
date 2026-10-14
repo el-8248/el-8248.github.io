@@ -244,6 +244,13 @@ async function loadMarkdownContent() {
 
 loadMarkdownContent();
 
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js', { updateViaCache: 'none' })
+            .catch(error => console.error('Unable to register the offline service worker.', error));
+    });
+}
+
 document.addEventListener('click', event => {
     const link = event.target.closest('a[href^="window:"]');
     if (!link) return;

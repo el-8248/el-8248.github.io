@@ -10,14 +10,10 @@ One of my friends in the stairwell for our "Indoor Natural Light" project.
 
 ### Placeholder
 
-![General photography placeholder](https://picsum.photos/id/13/600/400)
-
 More photos coming soon.
 
 ## Lake Washington Cars & Coffee
 
 ### Placeholder
-
-![Cars and coffee photography placeholder](https://picsum.photos/id/16/600/400)
 
 More photos coming soon.
