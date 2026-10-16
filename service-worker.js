@@ -52,28 +52,29 @@ self.addEventListener('fetch', event => {
   const requestUrl = new URL(request.url);
   if (request.method !== 'GET' || requestUrl.origin !== self.location.origin) return;
 
-  if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request).catch(async () => {
-        const cache = await caches.open(CACHE_NAME);
-        return await cache.match(request, { ignoreSearch: true })
-          || await cache.match('./index.html');
-      })
-    );
-    return;
-  }
-
-  event.respondWith(
-    caches.match(request, { ignoreSearch: true }).then(cachedResponse => {
-      if (cachedResponse) return cachedResponse;
-      return fetch(request).then(response => {
-        if (response.ok && response.type === 'basic') {
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(request, responseToCache))
-            .catch(error => console.error('Unable to cache a site resource.', error));
+  event.respondWith((async () => {
+    try {
+      const response = await fetch(request, { cache: 'no-cache' });
+      if (response.ok && response.type === 'basic') {
+        try {
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put(request, response.clone());
+        } catch (error) {
+          console.error('Unable to cache a site resource.', error);
         }
-        return response;
-      });
-    })
-  );
+      }
+      return response;
+    } catch (error) {
+      const cache = await caches.open(CACHE_NAME);
+      const cachedResponse = await cache.match(request, { ignoreSearch: true });
+      if (cachedResponse) return cachedResponse;
+
+      if (request.mode === 'navigate') {
+        const cachedIndex = await cache.match('./index.html');
+        if (cachedIndex) return cachedIndex;
+      }
+
+      throw error;
+    }
+  })());
 });
