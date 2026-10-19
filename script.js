@@ -161,6 +161,14 @@ function showGalleryAlbum(album) {
             const content = node.cloneNode(true);
             if (content.tagName === 'P' && content.querySelector('img')) {
                 content.className = 'feed-image';
+                content.querySelectorAll('img').forEach(image => {
+                    const link = document.createElement('a');
+                    link.href = image.src;
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    image.replaceWith(link);
+                    link.append(image);
+                });
             } else if (content.tagName === 'P') {
                 content.className = 'feed-desc';
             }

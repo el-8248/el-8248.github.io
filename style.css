@@ -101,6 +101,11 @@
     .window {
       position: absolute;
       width: 450px;
+      min-width: 280px;
+      min-height: 180px;
+      max-width: calc(100vw - 20px);
+      max-height: calc(100vh - 42px);
+      resize: both;
       background: black;
       border-radius: 8px 8px 5px 5px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -166,6 +171,8 @@
       padding: 18px;
       background: darkslategray;
       flex: 1;
+      min-height: 0;
+      min-width: 0;
       overflow-y: auto;
       font-size: 14px;
       color: white;
